@@ -33,19 +33,28 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public Book getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
-        return namedParameterJdbcOperations.queryForObject(
-                "select * from books where book_id = :id", params, new BookMapper()
-        );
+        String sql = "SELECT * FROM books b " +
+                "INNER JOIN authors a on b.author_id = a.author_id " +
+                "INNER JOIN genres g on b.genre_id = g.genre_id " +
+                "WHERE b.book_id = :id";
+        try {
+            return namedParameterJdbcOperations.queryForObject(
+                    sql, params, new BookMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
+
 
     @Override
     public List<Book> getAll() {
         String sql = "SELECT * FROM books b " +
                 "INNER JOIN authors a on b.author_id = a.author_id " +
                 "INNER JOIN genres g on b.genre_id = g.genre_id";
-        List<Book> orgList = namedParameterJdbcOperations.query(sql, new BookMapper());
+        List<Book> bookList = namedParameterJdbcOperations.query(sql, new BookMapper());
 
-        return orgList;
+        return bookList;
     }
 
     @Override
