@@ -1,0 +1,23 @@
+package ru.otus.spring.service;
+
+import org.springframework.stereotype.Service;
+import ru.otus.spring.domain.Author;
+import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.Genre;
+
+import java.util.List;
+
+public interface BookStorage {
+
+    List<Author> getAllAuthors();
+
+    List<Genre> getAllGenres();
+
+    List<Book> getAllBooks();
+
+    void insertBook(String bookName, String authorName, String genreName);
+
+    void updateBook(String oldBookName, String newBookName, String newAuthorName, String newGenreName);
+
+    void deleteBook(String bookName);
+}
