@@ -3,6 +3,7 @@ package ru.otus.spring.service;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
 
 import java.util.List;
@@ -12,12 +13,14 @@ public class BookStorageImpl implements BookStorage {
     private final AuthorService authorService;
     private final GenreService genreService;
     private final BookService bookService;
+    private final CommentService commentService;
     private final ConsoleIOService consoleIOService;
 
-    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, ConsoleIOService consoleIOService) {
+    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, CommentService commentService, ConsoleIOService consoleIOService) {
         this.authorService = authorService;
         this.genreService = genreService;
         this.bookService = bookService;
+        this.commentService = commentService;
         this.consoleIOService = consoleIOService;
     }
 
@@ -112,7 +115,43 @@ public class BookStorageImpl implements BookStorage {
         if (!isNotReadyForDelete) {
             bookService.deleteById(book.getId());
         }
+    }
 
+    @Override
+    public void addComment(String bookName, String text) {
+        boolean isNotReadyForCommentInsertion = false;
+        Book book = bookService.getByName(bookName);
+
+        if (book == null) {
+            isNotReadyForCommentInsertion = true;
+            consoleIOService.out("Book with this name not found. Please enter existing book name.");
+        }
+
+        if (!isNotReadyForCommentInsertion) {
+            Comment comment = new Comment(book, text);
+            commentService.addComment(comment);
+        }
+    }
+
+    @Override
+    public List<Comment> getCommentsForBook(String bookName) {
+        boolean isNotReady = false;
+        Book book = bookService.getByName(bookName);
+
+        if (book == null) {
+            isNotReady = true;
+            consoleIOService.out("Book with this name not found. Please enter existing book name.");
+        }
+
+        if (!isNotReady) {
+            return commentService.findCommentsByBook(book);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteCommentById(long id) {
 
     }
 

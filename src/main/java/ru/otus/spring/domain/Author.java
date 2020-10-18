@@ -1,7 +1,23 @@
 package ru.otus.spring.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "authors")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name ="author_id", unique = true, nullable = false)
     private long id;
+
+    @Column(name ="author_name")
     private String name;
 
     public String getName() {
@@ -13,11 +29,6 @@ public class Author {
     }
 
     public Author(String name) {
-        this.name = name;
-    }
-
-    public Author(long id, String name) {
-        this.id = id;
         this.name = name;
     }
 

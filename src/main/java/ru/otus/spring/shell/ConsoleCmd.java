@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.service.BookStorage;
 import ru.otus.spring.service.ConsoleIOService;
@@ -95,6 +96,32 @@ public class ConsoleCmd {
             bookStorage.deleteBook(bookName);
         } else {
             consoleIOService.out("Cannot delete.");
+        }
+    }
+
+    @ShellMethod(value = "Add comment {(String bookName, String text)}", key = {"ac", "add-comment"})
+    public void addComment(@ShellOption(defaultValue = NOVALUE) String bookName,
+                           @ShellOption(defaultValue = NOVALUE) String text) {
+        if (!bookName.equals(NOVALUE) && !text.equals(NOVALUE)) {
+            bookStorage.addComment(bookName, text);
+        } else {
+            consoleIOService.out("Cannot add comment.");
+        }
+    }
+
+    @ShellMethod(value = "View comments for {(String bookName)}", key = {"vc", "view-comments"})
+    public void viewCommentsForBook(@ShellOption(defaultValue = NOVALUE) String bookName) {
+        if (!bookName.equals(NOVALUE)) {
+            List<Comment> comments = bookStorage.getCommentsForBook(bookName);
+
+            if ((comments != null) && (comments.size() > 0)) {
+                for (Comment comment: comments) {
+                    consoleIOService.out(comment.toString());
+                }
+            } else {
+                consoleIOService.out("No comments for this book");
+            }
+
         }
     }
 

@@ -3,6 +3,7 @@ package ru.otus.spring.service;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
 
 import java.util.List;
@@ -20,4 +21,10 @@ public interface BookStorage {
     void updateBook(String oldBookName, String newBookName, String newAuthorName, String newGenreName);
 
     void deleteBook(String bookName);
+
+    void addComment(String bookName, String text);
+
+    List<Comment> getCommentsForBook(String bookName);
+
+    void deleteCommentById(long id);
 }
