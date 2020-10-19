@@ -7,6 +7,7 @@ import ru.otus.spring.dao.CommentDao;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -32,5 +33,10 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void deleteComment(Comment comment) {
         commentRepository.deleteComment(comment);
+    }
+
+    @Override
+    public Comment findCommentByID(long id) {
+       return commentRepository.findCommentByID(id);
     }
 }

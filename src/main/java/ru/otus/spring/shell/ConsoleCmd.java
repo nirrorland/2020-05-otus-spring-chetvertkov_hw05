@@ -12,6 +12,7 @@ import ru.otus.spring.domain.Genre;
 import ru.otus.spring.service.BookStorage;
 import ru.otus.spring.service.ConsoleIOService;
 
+import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class ConsoleCmd {
     public void listAuthors() {
         List<Author> authors = bookStorage.getAllAuthors();
         if ((authors != null) && (authors.size() > 0)) {
-            for (Author author: authors) {
+            for (Author author : authors) {
                 consoleIOService.out(author.getName());
             }
         } else {
@@ -46,7 +47,7 @@ public class ConsoleCmd {
         List<Genre> genres = bookStorage.getAllGenres();
 
         if ((genres != null) && (genres.size() > 0)) {
-            for (Genre genre: genres) {
+            for (Genre genre : genres) {
                 consoleIOService.out(genre.getName());
             }
         } else {
@@ -59,7 +60,7 @@ public class ConsoleCmd {
         List<Book> books = bookStorage.getAllBooks();
 
         if ((books != null) && (books.size() > 0)) {
-            for (Book book: books) {
+            for (Book book : books) {
                 consoleIOService.out(book.toString() + " || GENRE=" + book.getGenre().getName() + " || AUTHOR=" + book.getAuthor().getName());
             }
         } else {
@@ -69,8 +70,8 @@ public class ConsoleCmd {
 
     @ShellMethod(value = "Insert new book {(String oldBookName, String newBookName, String newAuthorName, String newGenreName)}", key = {"ib", "insert-book"})
     public void insertBook(@ShellOption(defaultValue = NOVALUE) String bookName,
-                        @ShellOption(defaultValue = NOVALUE) String authorName,
-                        @ShellOption(defaultValue = NOVALUE) String genreName) {
+                           @ShellOption(defaultValue = NOVALUE) String authorName,
+                           @ShellOption(defaultValue = NOVALUE) String genreName) {
         if (!bookName.equals(NOVALUE) && !authorName.equals(NOVALUE) && !genreName.equals(NOVALUE)) {
             bookStorage.insertBook(bookName, authorName, genreName);
         } else {
@@ -80,13 +81,13 @@ public class ConsoleCmd {
 
     @ShellMethod(value = "Update book {(String oldBookName, String newBookName, String newAuthorName, String newGenreName)}", key = {"ub", "update-book"})
     public void updateBook(@ShellOption(defaultValue = NOVALUE) String oldBookName,
-                        @ShellOption(defaultValue = NOVALUE) String newBookName,
-                        @ShellOption(defaultValue = NOVALUE) String newAuthorName,
-                        @ShellOption(defaultValue = NOVALUE) String newGenreName) {
+                           @ShellOption(defaultValue = NOVALUE) String newBookName,
+                           @ShellOption(defaultValue = NOVALUE) String newAuthorName,
+                           @ShellOption(defaultValue = NOVALUE) String newGenreName) {
         if (!oldBookName.equals(NOVALUE) && !newBookName.equals(NOVALUE) && !newAuthorName.equals(NOVALUE) && !newGenreName.equals(NOVALUE)) {
             bookStorage.updateBook(oldBookName, newBookName, newAuthorName, newGenreName);
         } else {
-            consoleIOService.out("Cannot update.");
+            consoleIOService.out("Wrong parameters. Cannot update.");
         }
     }
 
@@ -115,13 +116,23 @@ public class ConsoleCmd {
             List<Comment> comments = bookStorage.getCommentsForBook(bookName);
 
             if ((comments != null) && (comments.size() > 0)) {
-                for (Comment comment: comments) {
+                for (Comment comment : comments) {
                     consoleIOService.out(comment.toString());
                 }
             } else {
                 consoleIOService.out("No comments for this book");
             }
 
+        }
+    }
+
+    @ShellMethod(value = "Delete comment by Id {(Integer ID)}", key = {"dc", "delete-comment"})
+    public void deleteCommentById(@ShellOption Integer id) {
+        if (id != null) {
+            bookStorage.deleteCommentById(id);
+
+        } else {
+            consoleIOService.out("No comments for this book");
         }
     }
 

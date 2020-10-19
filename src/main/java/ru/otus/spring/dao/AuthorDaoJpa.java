@@ -1,7 +1,7 @@
 package ru.otus.spring.dao;
 
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.domain.Genre;
+import ru.otus.spring.domain.Author;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -9,18 +9,17 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
-public class GenreDaoJdbc implements GenreDao {
+public class AuthorDaoJpa implements AuthorDao {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public Genre getById(long id) {
-        TypedQuery<Genre> query = em.createQuery(
-                "select g from Genre g where g.id = :id"
-                , Genre.class);
+    public Author getById(long id) {
+        TypedQuery<Author> query = em.createQuery(
+                "SELECT a FROM Author a WHERE a.id = :id"
+                , Author.class);
         query.setParameter("id", id);
         try {
             return query.getSingleResult();
@@ -30,15 +29,15 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public List<Genre> getAll() {
-        return em.createQuery("SELECT g FROM Genre g", Genre.class).getResultList();
+    public List<Author> getAll() {
+        return em.createQuery("select a from Author a", Author.class).getResultList();
     }
 
     @Override
-    public Genre getByName(String name) {
-        TypedQuery<Genre> query = em.createQuery(
-                "SELECT g FROM Genre g WHERE lower(g.name) = lower(:name)"
-                , Genre.class);
+    public Author getByName(String name) {
+        TypedQuery<Author> query = em.createQuery(
+                "SELECT a FROM Author a where lower(a.name) = lower(:name)"
+                , Author.class);
         query.setParameter("name", name);
         try {
             return query.getSingleResult();

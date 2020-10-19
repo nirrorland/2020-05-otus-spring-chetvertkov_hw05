@@ -8,7 +8,7 @@ import java.util.List;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
-public class BookDaoJdbc implements BookDao {
+public class BookDaoJpa implements BookDao {
 
     @PersistenceContext
     private EntityManager em;
@@ -48,26 +48,14 @@ public class BookDaoJdbc implements BookDao {
     @Transactional
     public void insert(Book book) {
 
-
         em.persist(book);
     }
 
     @Override
     @Transactional
     public void update(Book book) {
-        Query query = em.createQuery("UPDATE Book b " +
-                "  SET " +
-                "      b.name = :BOOK_NAME," +
-                "      b.author = :AUTHOR_ID," +
-                "      b.genre = :GENRE_ID" +
-                "   WHERE b.id = :BOOK_ID");
 
-        query.setParameter("BOOK_ID", book.getId());
-        query.setParameter("BOOK_NAME", book.getName());
-        query.setParameter("AUTHOR_ID", book.getAuthor());
-        query.setParameter("GENRE_ID", book.getGenre());
-        query.executeUpdate();
-       // em.merge(book);
+        em.merge(book);
     }
 
     @Override

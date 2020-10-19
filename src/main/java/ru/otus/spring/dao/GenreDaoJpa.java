@@ -1,28 +1,26 @@
 package ru.otus.spring.dao;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.domain.Author;
+import ru.otus.spring.domain.Genre;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
+@SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
-public class AuthorDaoJdbc implements AuthorDao {
+public class GenreDaoJpa implements GenreDao {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public Author getById(long id) {
-        TypedQuery<Author> query = em.createQuery(
-                "SELECT a FROM Author a WHERE a.id = :id"
-                , Author.class);
+    public Genre getById(long id) {
+        TypedQuery<Genre> query = em.createQuery(
+                "select g from Genre g where g.id = :id"
+                , Genre.class);
         query.setParameter("id", id);
         try {
             return query.getSingleResult();
@@ -32,15 +30,15 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public List<Author> getAll() {
-        return em.createQuery("select a from Author a", Author.class).getResultList();
+    public List<Genre> getAll() {
+        return em.createQuery("SELECT g FROM Genre g", Genre.class).getResultList();
     }
 
     @Override
-    public Author getByName(String name) {
-        TypedQuery<Author> query = em.createQuery(
-                "SELECT a FROM Author a where lower(a.name) = lower(:name)"
-                , Author.class);
+    public Genre getByName(String name) {
+        TypedQuery<Genre> query = em.createQuery(
+                "SELECT g FROM Genre g WHERE lower(g.name) = lower(:name)"
+                , Genre.class);
         query.setParameter("name", name);
         try {
             return query.getSingleResult();

@@ -5,7 +5,11 @@ import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
+import ru.otus.spring.event.ErrorEvent;
+import ru.otus.spring.event.EventMessage;
+import ru.otus.spring.event.EventPublisher;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -15,13 +19,15 @@ public class BookStorageImpl implements BookStorage {
     private final BookService bookService;
     private final CommentService commentService;
     private final ConsoleIOService consoleIOService;
+    private final EventPublisher eventsPublisher;
 
-    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, CommentService commentService, ConsoleIOService consoleIOService) {
+    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, CommentService commentService, ConsoleIOService consoleIOService, EventPublisher eventsPublisher) {
         this.authorService = authorService;
         this.genreService = genreService;
         this.bookService = bookService;
         this.commentService = commentService;
         this.consoleIOService = consoleIOService;
+        this.eventsPublisher = eventsPublisher;
     }
 
     @Override
@@ -50,17 +56,17 @@ public class BookStorageImpl implements BookStorage {
 
         if (author == null) {
             isNotReadyForInsertion = true;
-            consoleIOService.out("Author not found. Please make sure author is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_AUTHOR_NOT_FOUND);
         }
 
         if (genre == null) {
             isNotReadyForInsertion = true;
-            consoleIOService.out("Genre not found. Please make sure genre is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_GENRE_NOT_FOUND);
         }
 
         if (oldBook != null) {
             isNotReadyForInsertion = true;
-            consoleIOService.out("Book with same name already exists. Please enter unique name.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOKNAME_ALREADY_EXISTS);
         }
 
         if (!isNotReadyForInsertion) {
@@ -80,17 +86,17 @@ public class BookStorageImpl implements BookStorage {
 
         if (author == null) {
             isNotReadyForUpdate = true;
-            consoleIOService.out("Author not found. Please make sure author is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_AUTHOR_NOT_FOUND);
         }
 
         if (genre == null) {
             isNotReadyForUpdate = true;
-            consoleIOService.out("Genre not found. Please make sure genre is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_GENRE_NOT_FOUND);
         }
 
         if (oldBook == null) {
             isNotReadyForUpdate = true;
-            consoleIOService.out("Book with same name was not found. Please enter existed name.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
         }
 
         if (!isNotReadyForUpdate) {
@@ -109,7 +115,7 @@ public class BookStorageImpl implements BookStorage {
 
         if (book == null) {
             isNotReadyForDelete = true;
-            consoleIOService.out("Book not found. Cannot delete.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
         }
 
         if (!isNotReadyForDelete) {
@@ -124,7 +130,7 @@ public class BookStorageImpl implements BookStorage {
 
         if (book == null) {
             isNotReadyForCommentInsertion = true;
-            consoleIOService.out("Book with this name not found. Please enter existing book name.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
         }
 
         if (!isNotReadyForCommentInsertion) {
@@ -140,7 +146,7 @@ public class BookStorageImpl implements BookStorage {
 
         if (book == null) {
             isNotReady = true;
-            consoleIOService.out("Book with this name not found. Please enter existing book name.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
         }
 
         if (!isNotReady) {
@@ -151,8 +157,14 @@ public class BookStorageImpl implements BookStorage {
     }
 
     @Override
+    @Transactional
     public void deleteCommentById(long id) {
+        Comment comment = commentService.findCommentByID(id);
 
+        if (comment != null) {
+            commentService.deleteComment(comment);
+
+        }
     }
 
 }
