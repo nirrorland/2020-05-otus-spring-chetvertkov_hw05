@@ -45,21 +45,18 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public void insert(Book book) {
 
         em.persist(book);
     }
 
     @Override
-    @Transactional
     public void update(Book book) {
 
         em.merge(book);
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
         Query query = em.createQuery("DELETE Book b " +
                 "WHERE b.id = :BOOK_ID");

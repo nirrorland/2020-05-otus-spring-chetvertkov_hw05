@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.CommentDao;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -18,6 +20,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void addComment(Comment comment) {
         commentRepository.addComment(comment);
     }
@@ -28,6 +31,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void deleteComment(Comment comment) {
         commentRepository.deleteComment(comment);
     }
