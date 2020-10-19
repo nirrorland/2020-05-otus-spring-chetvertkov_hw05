@@ -1,6 +1,5 @@
 package ru.otus.spring.dao;
 
-import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 
 import java.util.List;

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Author;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -16,14 +15,13 @@ import java.util.List;
 @Transactional
 public class AuthorDaoJpaTest {
 
-
     @Autowired
     private AuthorDaoJpa authorDao;
 
     @Test
     @DisplayName("getById получает нужный экземпляр по id")
     void getByIdTest() {
-      Assert.assertEquals(authorDao.getById(1).getName(), "Tolkien");
+        Assert.assertEquals(authorDao.getById(1).getName(), "Tolkien");
     }
 
     @Test

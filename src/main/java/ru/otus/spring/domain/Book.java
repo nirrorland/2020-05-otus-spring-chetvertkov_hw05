@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "books")
@@ -29,13 +28,6 @@ public class Book {
     @OneToOne(targetEntity = Genre.class)
     @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
     private Genre genre;
-
-//    public Book(long id, String name, Author author, Genre genre) {
-//        this.id = id;
-//        this.name = name;
-//        this.author = author;
-//        this.genre = genre;
-//    }
 
     public Book(String name, Author author, Genre genre) {
         this.name = name;

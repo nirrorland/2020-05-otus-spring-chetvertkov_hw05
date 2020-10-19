@@ -5,7 +5,6 @@ import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.event.ErrorEvent;
 import ru.otus.spring.event.EventMessage;
 import ru.otus.spring.event.EventPublisher;
 

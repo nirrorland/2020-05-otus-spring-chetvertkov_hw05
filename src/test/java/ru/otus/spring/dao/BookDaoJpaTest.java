@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -101,7 +100,7 @@ public class BookDaoJpaTest {
         Book newBook = new Book("name of book", author, genre);
         bookDao.insert(newBook);
 
-        Assert.assertEquals(size+1, bookDao.getAll().size());
+        Assert.assertEquals(size + 1, bookDao.getAll().size());
         Assert.assertEquals("name of book", bookDao.getById(4).getName());
     }
 
@@ -131,7 +130,7 @@ public class BookDaoJpaTest {
 
         bookDao.deleteById(1);
 
-        Assert.assertEquals(size-1, bookDao.getAll().size());
+        Assert.assertEquals(size - 1, bookDao.getAll().size());
         Assert.assertNull(bookDao.getById(1));
     }
 

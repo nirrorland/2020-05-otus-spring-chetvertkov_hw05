@@ -2,12 +2,9 @@ package ru.otus.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.BookDao;
 import ru.otus.spring.dao.CommentDao;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
-
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service

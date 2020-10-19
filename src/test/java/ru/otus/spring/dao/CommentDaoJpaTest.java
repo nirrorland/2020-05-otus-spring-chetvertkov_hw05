@@ -1,6 +1,5 @@
 package ru.otus.spring.dao;
 
-
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
-
 import java.util.List;
 
 @DataJpaTest
@@ -26,13 +24,13 @@ public class CommentDaoJpaTest {
     void addComment() {
         Book book = bookRepo.getByName("Martian");
         List<Comment> comments = commentRepo.findCommentsByBook(book);
-       int size = comments.size();
+        int size = comments.size();
 
-        Comment comment = new Comment( book, "test comment");
+        Comment comment = new Comment(book, "test comment");
 
         commentRepo.addComment(comment);
         comments = commentRepo.findCommentsByBook(book);
-        Assert.assertEquals(comments.size(), size+1);
+        Assert.assertEquals(comments.size(), size + 1);
     }
 
     @Test
@@ -47,7 +45,7 @@ public class CommentDaoJpaTest {
         commentRepo.deleteComment(comment);
 
         comments = commentRepo.findCommentsByBook(book);
-        Assert.assertEquals(comments.size(), size-1);
+        Assert.assertEquals(comments.size(), size - 1);
     }
 
     @Test

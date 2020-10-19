@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.otus.spring.domain.Author;
@@ -13,8 +12,6 @@ import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.event.ErrorEvent;
 import ru.otus.spring.event.EventListner;
-import ru.otus.spring.event.EventPublisher;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -28,23 +25,12 @@ import static org.mockito.Mockito.verify;
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT + ".enabled=false"
 })
 class BookStorageImplTest {
-    @Autowired
-    AuthorService authorService;
-
-    @Autowired
-    GenreService genreService;
 
     @Autowired
     BookService bookService;
 
     @Autowired
     CommentService commentService;
-
-    @Autowired
-    ConsoleIOService consoleIOService;
-
-    @Autowired
-    EventPublisher eventsPublisher;
 
     @MockBean
     EventListner eventListner;
@@ -54,7 +40,7 @@ class BookStorageImplTest {
 
     @Test
     void getAllAuthorsTest() {
-        List<Author> authors =bookStorageService.getAllAuthors();
+        List<Author> authors = bookStorageService.getAllAuthors();
 
         assertEquals(authors.size(), 3);
         assertEquals(authors.get(0).getName(), "Tolkien");
@@ -74,7 +60,7 @@ class BookStorageImplTest {
 
     @Test
     void getAllBooksTest() {
-        List<Book> books =bookStorageService.getAllBooks();
+        List<Book> books = bookStorageService.getAllBooks();
 
         assertEquals(books.size(), 3);
         assertEquals(books.get(0).getName(), "Lord of the Rings");
