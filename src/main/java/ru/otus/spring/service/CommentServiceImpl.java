@@ -22,22 +22,22 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void addComment(Comment comment) {
-        commentRepository.addComment(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     public List<Comment> findCommentsByBook(Book book) {
-        return commentRepository.findCommentsByBook(book);
+        return commentRepository.findByBook(book);
     }
 
     @Override
     @Transactional
     public void deleteComment(Comment comment) {
-        commentRepository.deleteComment(comment);
+        commentRepository.delete(comment);
     }
 
     @Override
     public Comment findCommentByID(long id) {
-       return commentRepository.findCommentByID(id);
+       return commentRepository.findById(id).orElse(null);
     }
 }

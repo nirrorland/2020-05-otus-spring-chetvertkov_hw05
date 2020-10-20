@@ -1,13 +1,17 @@
 package ru.otus.spring.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.domain.Genre;
 import java.util.List;
+import java.util.Optional;
 
-public interface GenreDao {
+public interface GenreDao extends JpaRepository<Genre, Long> {
 
-    Genre getById(long id);
+    Optional<Genre> findById(long id);
 
-    List<Genre> getAll();
+    List<Genre> findAll();
 
-    Genre getByName(String name);
+    Optional<Genre> findByName(String name);
+
+    Optional<Genre> findByNameIgnoreCase(String name);
 }
