@@ -25,6 +25,12 @@ public class AuthorDaoJpaTest {
     }
 
     @Test
+    @DisplayName("getById получает null, если ничего не найдено")
+    void getByIdNotFoundTest() {
+        Assert.assertNull(authorDao.getById(5));
+    }
+
+    @Test
     @DisplayName("getAll получает все значения")
     void getAllTest() {
         List<Author> result = authorDao.getAll();

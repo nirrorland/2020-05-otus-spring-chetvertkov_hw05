@@ -9,7 +9,7 @@ public interface CommentDao {
 
     void addComment(Comment comment);
 
-    List<Comment> findCommentsByBook(Book book);
+    //List<Comment> findCommentsByBook(Book book);
 
     void deleteComment(Comment comment);
 

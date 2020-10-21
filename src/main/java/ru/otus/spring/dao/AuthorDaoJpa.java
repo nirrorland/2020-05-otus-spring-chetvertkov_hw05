@@ -17,15 +17,7 @@ public class AuthorDaoJpa implements AuthorDao {
 
     @Override
     public Author getById(long id) {
-        TypedQuery<Author> query = em.createQuery(
-                "SELECT a FROM Author a WHERE a.id = :id"
-                , Author.class);
-        query.setParameter("id", id);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return em.find(Author.class, id);
     }
 
     @Override

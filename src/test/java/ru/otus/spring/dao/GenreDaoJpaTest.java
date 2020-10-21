@@ -22,6 +22,12 @@ public class GenreDaoJpaTest {
     }
 
     @Test
+    @DisplayName("getById = null, если ничего не найдено")
+    void getByIdNotFoundTest() {
+        Assert.assertNull(genreDao.getById(6));
+    }
+
+    @Test
     @DisplayName("getById получает нужный экземпляр по id")
     void getAllTest() {
         List<Genre> result = genreDao.getAll();

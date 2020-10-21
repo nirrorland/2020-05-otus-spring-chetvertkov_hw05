@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
@@ -29,6 +30,10 @@ public class Book {
     @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
     private Genre genre;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
+    private List<Comment> comments;
+
     public Book(String name, Author author, Genre genre) {
         this.name = name;
         this.author = author;
@@ -37,6 +42,13 @@ public class Book {
 
     public Book(String name) {
         this.name = name;
+    }
+
+    public Book(long id, String name, Author author, Genre genre) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
     }
 
     public long getId() {
@@ -69,6 +81,10 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 
     @Override

@@ -18,15 +18,7 @@ public class GenreDaoJpa implements GenreDao {
 
     @Override
     public Genre getById(long id) {
-        TypedQuery<Genre> query = em.createQuery(
-                "select g from Genre g where g.id = :id"
-                , Genre.class);
-        query.setParameter("id", id);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+       return em.find(Genre.class, id);
     }
 
     @Override

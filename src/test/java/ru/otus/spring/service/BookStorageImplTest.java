@@ -12,6 +12,8 @@ import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.event.ErrorEvent;
 import ru.otus.spring.event.EventListner;
+
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -154,20 +156,19 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void addCommentTest() {
-        Book book = bookService.getByName("Lord of the Rings");
-        List<Comment> comments = commentService.findCommentsByBook(book);
+        List<Comment> comments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(comments.size(), 0);
 
         bookStorageService.addComment("Lord of the Rings", "TestComment");
-        comments = commentService.findCommentsByBook(book);
+
+        comments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(comments.size(), 1);
     }
 
     @Test
     @Transactional
     void getCommentsForBookTest() {
-        Book book = bookService.getByName("Lord of the Rings");
-        List<Comment> comments = commentService.findCommentsByBook(book);
+        List<Comment> comments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(comments.size(), 0);
 
         bookStorageService.addComment("Lord of the Rings", "TestComment2");
@@ -179,13 +180,12 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void deleteCommentByIdTest() {
-        Book book = bookService.getByName("Martian");
-        List<Comment> comments = commentService.findCommentsByBook(book);
+        List<Comment> comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 2);
 
         bookStorageService.deleteCommentById(comments.get(0).getId());
 
-        comments = commentService.findCommentsByBook(book);
+        comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 1);
 
     }

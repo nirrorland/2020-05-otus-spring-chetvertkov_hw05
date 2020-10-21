@@ -149,7 +149,7 @@ public class BookStorageImpl implements BookStorage {
         }
 
         if (!isNotReady) {
-            return commentService.findCommentsByBook(book);
+            return book.getComments();
         } else {
             return null;
         }
