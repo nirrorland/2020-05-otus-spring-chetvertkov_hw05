@@ -1,10 +1,15 @@
 package ru.otus.spring.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
+import ru.otus.spring.event.EventMessage;
+import ru.otus.spring.event.EventPublisher;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -12,13 +17,17 @@ public class BookStorageImpl implements BookStorage {
     private final AuthorService authorService;
     private final GenreService genreService;
     private final BookService bookService;
+    private final CommentService commentService;
     private final ConsoleIOService consoleIOService;
+    private final EventPublisher eventsPublisher;
 
-    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, ConsoleIOService consoleIOService) {
+    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, CommentService commentService, ConsoleIOService consoleIOService, EventPublisher eventsPublisher) {
         this.authorService = authorService;
         this.genreService = genreService;
         this.bookService = bookService;
+        this.commentService = commentService;
         this.consoleIOService = consoleIOService;
+        this.eventsPublisher = eventsPublisher;
     }
 
     @Override
@@ -47,17 +56,17 @@ public class BookStorageImpl implements BookStorage {
 
         if (author == null) {
             isNotReadyForInsertion = true;
-            consoleIOService.out("Author not found. Please make sure author is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_AUTHOR_NOT_FOUND);
         }
 
         if (genre == null) {
             isNotReadyForInsertion = true;
-            consoleIOService.out("Genre not found. Please make sure genre is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_GENRE_NOT_FOUND);
         }
 
         if (oldBook != null) {
             isNotReadyForInsertion = true;
-            consoleIOService.out("Book with same name already exists. Please enter unique name.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOKNAME_ALREADY_EXISTS);
         }
 
         if (!isNotReadyForInsertion) {
@@ -77,17 +86,17 @@ public class BookStorageImpl implements BookStorage {
 
         if (author == null) {
             isNotReadyForUpdate = true;
-            consoleIOService.out("Author not found. Please make sure author is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_AUTHOR_NOT_FOUND);
         }
 
         if (genre == null) {
             isNotReadyForUpdate = true;
-            consoleIOService.out("Genre not found. Please make sure genre is presented in DB.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_GENRE_NOT_FOUND);
         }
 
         if (oldBook == null) {
             isNotReadyForUpdate = true;
-            consoleIOService.out("Book with same name was not found. Please enter existed name.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
         }
 
         if (!isNotReadyForUpdate) {
@@ -106,14 +115,58 @@ public class BookStorageImpl implements BookStorage {
 
         if (book == null) {
             isNotReadyForDelete = true;
-            consoleIOService.out("Book not found. Cannot delete.");
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
         }
 
         if (!isNotReadyForDelete) {
             bookService.deleteById(book.getId());
         }
+    }
 
+    @Override
+    public void addComment(String bookName, String text) {
+        boolean isNotReadyForCommentInsertion = false;
+        Book book = bookService.getByName(bookName);
 
+        if (book == null) {
+            isNotReadyForCommentInsertion = true;
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
+        }
+
+        if (!isNotReadyForCommentInsertion) {
+            Comment comment = new Comment(book, text);
+            commentService.addComment(comment);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Comment> getCommentsForBook(String bookName) {
+        boolean isNotReady = false;
+        Book book = bookService.getByName(bookName);
+
+        if (book == null) {
+            isNotReady = true;
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
+        }
+
+        if (!isNotReady) {
+            Hibernate.initialize(book.getComments());
+            return book.getComments();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteCommentById(long id) {
+        Comment comment = commentService.findCommentByID(id);
+
+        if (comment != null) {
+            commentService.deleteComment(comment);
+
+        }
     }
 
 }
