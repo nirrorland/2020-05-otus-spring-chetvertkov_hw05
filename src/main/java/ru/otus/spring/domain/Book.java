@@ -3,7 +3,6 @@ package ru.otus.spring.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class Book {
     @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
     private Genre genre;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private List<Comment> comments;
 

@@ -1,5 +1,6 @@
 package ru.otus.spring.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
@@ -139,6 +140,7 @@ public class BookStorageImpl implements BookStorage {
     }
 
     @Override
+    @Transactional
     public List<Comment> getCommentsForBook(String bookName) {
         boolean isNotReady = false;
         Book book = bookService.getByName(bookName);
@@ -149,6 +151,7 @@ public class BookStorageImpl implements BookStorage {
         }
 
         if (!isNotReady) {
+            Hibernate.initialize(book.getComments());
             return book.getComments();
         } else {
             return null;
