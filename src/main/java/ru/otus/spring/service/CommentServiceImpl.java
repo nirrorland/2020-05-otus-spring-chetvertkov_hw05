@@ -26,7 +26,13 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void deleteComment(Comment comment) {
-        commentRepository.delete(comment);
+        commentRepository.deleteById(comment.getId());
+    }
+
+    @Override
+    public void deleteById(long id) {
+        commentRepository.deleteById(id);
+        commentRepository.flush();
     }
 
     @Override

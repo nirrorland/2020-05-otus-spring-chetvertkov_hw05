@@ -40,6 +40,9 @@ class BookStorageImplTest {
     @Autowired
     BookStorage bookStorageService;
 
+    @Autowired
+    private EntityManager em;
+
     @Test
     void getAllAuthorsTest() {
         List<Author> authors = bookStorageService.getAllAuthors();
@@ -161,6 +164,8 @@ class BookStorageImplTest {
 
         bookStorageService.addComment("Lord of the Rings", "TestComment");
 
+        em.clear();
+
         comments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(comments.size(), 1);
     }
@@ -172,6 +177,7 @@ class BookStorageImplTest {
         assertEquals(comments.size(), 0);
 
         bookStorageService.addComment("Lord of the Rings", "TestComment2");
+        em.clear();
 
         List<Comment> resultComments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(resultComments.get(0).getText(), "TestComment2");
@@ -184,6 +190,7 @@ class BookStorageImplTest {
         assertEquals(comments.size(), 2);
 
         bookStorageService.deleteCommentById(comments.get(0).getId());
+        em.clear();
 
         comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 1);

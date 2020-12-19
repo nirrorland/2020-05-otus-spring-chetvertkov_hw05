@@ -48,6 +48,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void deleteById(long id) {
         bookRepository.deleteById(id);
+        bookRepository.flush();
     }
 
 

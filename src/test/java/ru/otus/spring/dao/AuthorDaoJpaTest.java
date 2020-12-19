@@ -27,7 +27,7 @@ public class AuthorDaoJpaTest {
     @Test
     @DisplayName("getById получает null, если ничего не найдено")
     void getByIdNotFoundTest() {
-        Assert.assertNull(authorDao.findById(5).get());
+        Assert.assertNull(authorDao.findById(5).orElse(null));
     }
 
     @Test

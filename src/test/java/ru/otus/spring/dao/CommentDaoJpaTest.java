@@ -53,6 +53,8 @@ public class CommentDaoJpaTest {
         Comment comment = commentRepo.findById(1).get();
 
         commentRepo.delete(comment);
+        commentRepo.flush();
+        em.clear();
 
         Book book2 = bookRepo.findByNameIgnoreCase("Martian").get();
         List<Comment> comments2 = book2.getComments();

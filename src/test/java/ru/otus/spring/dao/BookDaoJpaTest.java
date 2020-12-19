@@ -39,7 +39,7 @@ public class BookDaoJpaTest {
     @DisplayName("getById = null, когда ничего не найдено")
     @Transactional
     void getByIdNotFoundTest() {
-        Assert.assertNull(bookDao.findById(0).get());
+        Assert.assertFalse(bookDao.findById(0).isPresent());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class BookDaoJpaTest {
     @DisplayName("getByName = null, когда записи не найдены")
     @Transactional
     void geByNameNotFoundTest() {
-        Book result = bookDao.findByNameIgnoreCase("MaRtian123").get();
+        Book result = bookDao.findByNameIgnoreCase("MaRtian123").orElse(null);
 
         Assert.assertNull(result);
     }
@@ -131,7 +131,7 @@ public class BookDaoJpaTest {
         bookDao.deleteById(1);
 
         Assert.assertEquals(size - 1, bookDao.findAll().size());
-        Assert.assertNull(bookDao.findById(1).get());
+        Assert.assertFalse(bookDao.findById(1).isPresent());
     }
 
 }

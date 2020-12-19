@@ -124,6 +124,7 @@ public class BookStorageImpl implements BookStorage {
     }
 
     @Override
+    @Transactional
     public void addComment(String bookName, String text) {
         boolean isNotReadyForCommentInsertion = false;
         Book book = bookService.getByName(bookName);
@@ -164,7 +165,7 @@ public class BookStorageImpl implements BookStorage {
         Comment comment = commentService.findCommentByID(id);
 
         if (comment != null) {
-            commentService.deleteComment(comment);
+            commentService.deleteById(comment.getId());
 
         }
     }

@@ -13,8 +13,8 @@ public interface CommentDao extends JpaRepository<Comment, Long> {
 
     Comment save(Comment comment);
 
-    //List<Comment> findCommentsByBook(Book book);
-
     void delete(Comment comment);
+
+    void deleteById(long id);
 
 }
