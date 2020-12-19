@@ -10,27 +10,27 @@ import ru.otus.spring.domain.Genre;
 import java.util.List;
 
 @DataJpaTest
-@Import(GenreDaoJpa.class)
+@Import(GenreDao.class)
 public class GenreDaoJpaTest {
     @Autowired
-    private GenreDaoJpa genreDao;
+    private GenreDao genreDao;
 
     @Test
     @DisplayName("getById получает нужный экземпляр по id")
     void getByIdTest() {
-        Assert.assertEquals(genreDao.getById(1).getName(), "Drama");
+        Assert.assertEquals(genreDao.findById(1).get().getName(), "Drama");
     }
 
     @Test
     @DisplayName("getById = null, если ничего не найдено")
     void getByIdNotFoundTest() {
-        Assert.assertNull(genreDao.getById(6));
+        Assert.assertFalse(genreDao.findById(6).isPresent());
     }
 
     @Test
     @DisplayName("getById получает нужный экземпляр по id")
     void getAllTest() {
-        List<Genre> result = genreDao.getAll();
+        List<Genre> result = genreDao.findAll();
 
         Assert.assertEquals(result.size(), 3);
         Assert.assertEquals(result.get(0).getName(), "Drama");
@@ -41,7 +41,7 @@ public class GenreDaoJpaTest {
     @Test
     @DisplayName("getById получает нужный экземпляр по id")
     void getByNameTest() {
-        Genre result = genreDao.getByName("History");
+        Genre result = genreDao.findByNameIgnoreCase("History").get();
 
         Assert.assertEquals("History", result.getName());
         Assert.assertEquals(3, result.getId());
@@ -50,7 +50,7 @@ public class GenreDaoJpaTest {
     @Test
     @DisplayName("getById получает нужный экземпляр по id")
     void getByNameIgnoreCaseTest() {
-        Genre result = genreDao.getByName("HiStOry");
+        Genre result = genreDao.findByNameIgnoreCase("HiStOry").get();
 
         Assert.assertEquals("History", result.getName());
         Assert.assertEquals(3, result.getId());

@@ -14,14 +14,14 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @DataJpaTest
-@Import({CommentDaoJpa.class, BookDaoJpa.class})
+@Import({CommentDao.class, BookDao.class})
 @Transactional
 public class CommentDaoJpaTest {
     @Autowired
-    private CommentDaoJpa commentRepo;
+    private CommentDao commentRepo;
 
     @Autowired
-    private BookDaoJpa bookRepo;
+    private BookDao bookRepo;
 
     @Autowired
     private EntityManager em;
@@ -29,16 +29,16 @@ public class CommentDaoJpaTest {
     @Test
     @DisplayName("addComment добавляет комментарий")
     void addComment() {
-        Book book = bookRepo.getByName("Martian");
+        Book book = bookRepo.findByNameIgnoreCase("Martian").get();
         List<Comment> comments = book.getComments();
         int size = comments.size();
 
         Comment comment = new Comment(book, "test comment");
-        commentRepo.addComment(comment);
+        commentRepo.saveAndFlush(comment);
 
         em.clear();
 
-        Book book2 = bookRepo.getByName("Martian");
+        Book book2 = bookRepo.findByNameIgnoreCase("Martian").get();
         List<Comment>comments2 = book2.getComments();;
         Assert.assertEquals(comments2.size(), size + 1);
     }
@@ -46,29 +46,29 @@ public class CommentDaoJpaTest {
     @Test
     @DisplayName("deleteComment удаляет комментарий")
     void deleteComment() {
-        Book book = bookRepo.getByName("Martian");
+        Book book = bookRepo.findByNameIgnoreCase("Martian").get();
         List<Comment> comments = book.getComments();
         int size = comments.size();
 
         Comment comment = commentRepo.findCommentByID(1);
 
-        commentRepo.deleteComment(comment);
+        commentRepo.delete(comment);
 
-        Book book2 = bookRepo.getByName("Martian");
+        Book book2 = bookRepo.findByNameIgnoreCase("Martian").get();
         List<Comment> comments2 = book2.getComments();
         Assert.assertEquals(comments2.size(), size - 1);
     }
 
     @Test
     void findCommentForBook() {
-        Book book = bookRepo.getByName("Martian");
+        Book book = bookRepo.findByNameIgnoreCase("Martian").get();
         List<Comment> comments = book.getComments();
         Assert.assertEquals(comments.size(), 2);
     }
 
     @Test
     void findCommentForBookNoResult() {
-        Book book = bookRepo.getByName("Lord of the Rings");
+        Book book = bookRepo.findByNameIgnoreCase("Lord of the Rings").get();
         List<Comment> comments = book.getComments();
         Assert.assertTrue(comments.isEmpty());
     }

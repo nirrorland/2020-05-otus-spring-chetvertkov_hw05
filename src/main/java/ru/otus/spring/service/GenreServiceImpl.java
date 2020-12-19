@@ -18,16 +18,16 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getById(int id) {
-        return genreRepository.getById(id);
+        return genreRepository.findById(id).get();
     }
 
     @Override
     public List<Genre> getAll() {
-        return genreRepository.getAll();
+        return genreRepository.findAll();
     }
 
     @Override
     public Genre getByName(String name) {
-        return genreRepository.getByName(name);
+        return genreRepository.findByNameIgnoreCase(name).get();
     }
 }
