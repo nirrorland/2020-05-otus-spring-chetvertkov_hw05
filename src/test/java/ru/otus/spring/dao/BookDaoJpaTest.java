@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @DataJpaTest
-@Import({BookDao.class, AuthorDao.class, GenreDao.class})
+//@Import({BookDao.class, AuthorDao.class, GenreDao.class})
 public class BookDaoJpaTest {
 
     @Autowired

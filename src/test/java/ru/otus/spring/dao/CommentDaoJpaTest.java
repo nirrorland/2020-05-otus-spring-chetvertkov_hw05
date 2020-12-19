@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @DataJpaTest
-@Import({CommentDao.class, BookDao.class})
+//@Import({CommentDao.class, BookDao.class})
 @Transactional
 public class CommentDaoJpaTest {
     @Autowired
@@ -50,7 +50,7 @@ public class CommentDaoJpaTest {
         List<Comment> comments = book.getComments();
         int size = comments.size();
 
-        Comment comment = commentRepo.findCommentByID(1);
+        Comment comment = commentRepo.findById(1).get();
 
         commentRepo.delete(comment);
 
@@ -75,7 +75,7 @@ public class CommentDaoJpaTest {
 
     @Test
     void findCommentById() {
-        Comment comment = commentRepo.findCommentByID(2);
+        Comment comment = commentRepo.findById(2).get();
         Assert.assertEquals(comment.getText(), "Martian Comment 2");
     }
 

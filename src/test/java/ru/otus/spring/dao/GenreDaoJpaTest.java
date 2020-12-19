@@ -10,7 +10,7 @@ import ru.otus.spring.domain.Genre;
 import java.util.List;
 
 @DataJpaTest
-@Import(GenreDao.class)
+//@Import(GenreDao.class)
 public class GenreDaoJpaTest {
     @Autowired
     private GenreDao genreDao;

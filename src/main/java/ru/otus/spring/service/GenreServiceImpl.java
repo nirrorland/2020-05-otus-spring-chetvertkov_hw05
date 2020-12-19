@@ -18,7 +18,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getById(int id) {
-        return genreRepository.findById(id).get();
+        return genreRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -28,6 +28,6 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getByName(String name) {
-        return genreRepository.findByNameIgnoreCase(name).get();
+        return genreRepository.findByNameIgnoreCase(name).orElse(null);
     }
 }

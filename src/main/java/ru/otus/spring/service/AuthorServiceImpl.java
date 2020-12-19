@@ -18,12 +18,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author getById(int id) {
-        return authorRepository.findById(id).get();
+        return authorRepository.findById(id).orElse(null);
     }
 
     @Override
     public Author getByName(String name) {
-        return authorRepository.findByNameIgnoreCase(name).get();
+        return authorRepository.findByNameIgnoreCase(name).orElse(null);
     }
 
     @Override

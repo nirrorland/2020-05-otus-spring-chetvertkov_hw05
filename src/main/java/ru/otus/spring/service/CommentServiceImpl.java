@@ -31,6 +31,6 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Comment findCommentByID(long id) {
-       return commentRepository.findCommentByID(id);
+       return commentRepository.findById(id).orElse(null);
     }
 }

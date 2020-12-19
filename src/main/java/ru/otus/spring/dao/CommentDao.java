@@ -17,5 +17,4 @@ public interface CommentDao extends JpaRepository<Comment, Long> {
 
     void delete(Comment comment);
 
-    Comment findCommentByID(long id);
 }
