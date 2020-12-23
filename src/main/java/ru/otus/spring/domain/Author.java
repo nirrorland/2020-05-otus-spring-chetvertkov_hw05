@@ -7,14 +7,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
 @Document(collection = "authors")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
     @Id
-    //@Field(name ="author_id")
     private String id;
 
     @Field(name ="name")

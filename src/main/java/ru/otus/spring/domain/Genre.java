@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Genre {
 
     @Id
-    //@Field(name ="genre_id")
     private String id;
 
     @Field(name ="name")

@@ -14,9 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Comment     {
 
     @Id
-    //@Field(name ="comment_id")
     private String id;
-
 
     @DBRef
     @Field(name = "book")
