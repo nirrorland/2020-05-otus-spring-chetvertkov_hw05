@@ -3,21 +3,21 @@ package ru.otus.spring.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "authors")
+@Document(collection = "authors")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="author_id", unique = true, nullable = false)
-    private long id;
+    //@Field(name ="author_id")
+    private String id;
 
-    @Column(name ="author_name")
+    @Field(name ="name")
     private String name;
 
     public String getName() {
@@ -32,11 +32,11 @@ public class Author {
         this.name = name;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

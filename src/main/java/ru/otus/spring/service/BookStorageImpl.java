@@ -1,7 +1,8 @@
 package ru.otus.spring.service;
 
-import org.hibernate.Hibernate;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
@@ -9,7 +10,6 @@ import ru.otus.spring.domain.Genre;
 import ru.otus.spring.event.EventMessage;
 import ru.otus.spring.event.EventPublisher;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -152,8 +152,8 @@ public class BookStorageImpl implements BookStorage {
         }
 
         if (!isNotReady) {
-            Hibernate.initialize(book.getComments());
-            return book.getComments();
+
+            return commentService.findCommentsByBookId(book.getId());
         } else {
             return null;
         }
@@ -161,7 +161,7 @@ public class BookStorageImpl implements BookStorage {
 
     @Override
     @Transactional
-    public void deleteCommentById(long id) {
+    public void deleteCommentById(String id) {
         Comment comment = commentService.findCommentByID(id);
 
         if (comment != null) {

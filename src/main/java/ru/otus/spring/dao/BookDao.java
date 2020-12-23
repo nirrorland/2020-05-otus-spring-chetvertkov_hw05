@@ -1,24 +1,11 @@
 package ru.otus.spring.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.spring.domain.Book;
-
-import java.util.List;
 import java.util.Optional;
 
-public interface BookDao extends JpaRepository<Book, Long> {
-
-    Optional<Book> findById(long id);
-
-    List<Book> findAll();
-
-    Optional<Book> findByName(String name);
+public interface BookDao extends MongoRepository<Book, String> {
 
     Optional<Book> findByNameIgnoreCase(String name);
 
-    Book save(Book book);
-
-  //  void update(Book book);
-
-    void deleteById(long id);
 }

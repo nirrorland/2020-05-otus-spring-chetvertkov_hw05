@@ -2,10 +2,11 @@ package ru.otus.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.dao.CommentDao;
 import ru.otus.spring.domain.Comment;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService{
@@ -20,7 +21,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void addComment(Comment comment) {
-        commentRepository.saveAndFlush(comment);
+        commentRepository.save(comment);
     }
 
     @Override
@@ -30,13 +31,18 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         commentRepository.deleteById(id);
-        commentRepository.flush();
+
     }
 
     @Override
-    public Comment findCommentByID(long id) {
+    public List<Comment> findCommentsByBookId(String bookId) {
+        return commentRepository.findAllByBookId(bookId);
+    }
+
+    @Override
+    public Comment findCommentByID(String id) {
        return commentRepository.findById(id).orElse(null);
     }
 }
