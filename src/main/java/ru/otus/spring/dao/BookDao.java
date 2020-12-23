@@ -1,20 +1,14 @@
 package ru.otus.spring.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.domain.Book;
+import java.util.Optional;
 
-import java.util.List;
+public interface BookDao extends JpaRepository<Book, Long> {
 
-public interface BookDao {
+    Optional<Book> findById(long id);
 
-    Book getById(long id);
-
-    List<Book> getAll();
-
-    Book getByName(String name);
-
-    void insert(Book book);
-
-    void update(Book book);
+    Optional<Book> findByNameIgnoreCase(String name);
 
     void deleteById(long id);
 }

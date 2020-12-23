@@ -1,17 +1,17 @@
 package ru.otus.spring.dao;
 
-import ru.otus.spring.domain.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.domain.Comment;
+import java.util.Optional;
 
-import java.util.List;
+public interface CommentDao extends JpaRepository<Comment, Long> {
 
-public interface CommentDao {
+    Optional<Comment> findById(long id);
 
-    void addComment(Comment comment);
+    Comment save(Comment comment);
 
-    //List<Comment> findCommentsByBook(Book book);
+    void delete(Comment comment);
 
-    void deleteComment(Comment comment);
+    void deleteById(long id);
 
-    Comment findCommentByID(long id);
 }

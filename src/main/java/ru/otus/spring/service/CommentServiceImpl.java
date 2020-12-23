@@ -20,17 +20,23 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void addComment(Comment comment) {
-        commentRepository.addComment(comment);
+        commentRepository.saveAndFlush(comment);
     }
 
     @Override
     @Transactional
     public void deleteComment(Comment comment) {
-        commentRepository.deleteComment(comment);
+        commentRepository.deleteById(comment.getId());
+    }
+
+    @Override
+    public void deleteById(long id) {
+        commentRepository.deleteById(id);
+        commentRepository.flush();
     }
 
     @Override
     public Comment findCommentByID(long id) {
-       return commentRepository.findCommentByID(id);
+       return commentRepository.findById(id).orElse(null);
     }
 }

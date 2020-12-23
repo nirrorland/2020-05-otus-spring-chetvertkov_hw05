@@ -19,35 +19,36 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getById(long id) {
-        return bookRepository.getById(id);
+        return bookRepository.findById(id).orElse(null);
     }
 
     @Override
     public Book getByName(String name) {
-        return bookRepository.getByName(name);
+        return bookRepository.findByNameIgnoreCase(name).orElse(null);
     }
 
     @Override
     public List<Book> getAll() {
-        return bookRepository.getAll();
+        return bookRepository.findAll();
     }
 
     @Override
     @Transactional
     public void insert(Book book) {
-        bookRepository.insert(book);
+        bookRepository.saveAndFlush(book);
     }
 
     @Override
     @Transactional
     public void update(Book book) {
-        bookRepository.update(book);
+        bookRepository.saveAndFlush(book);
     }
 
     @Override
     @Transactional
     public void deleteById(long id) {
         bookRepository.deleteById(id);
+        bookRepository.flush();
     }
 
 

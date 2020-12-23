@@ -1,15 +1,13 @@
 package ru.otus.spring.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.domain.Author;
+import java.util.Optional;
 
-import java.util.List;
+public interface AuthorDao  extends JpaRepository<Author, Long> {
 
-public interface AuthorDao {
+    Optional<Author> findById(long id);
 
-    Author getById(long id);
-
-    List<Author> getAll();
-
-    Author getByName(String name);
+    Optional<Author> findByNameIgnoreCase(String name);
 
 }
