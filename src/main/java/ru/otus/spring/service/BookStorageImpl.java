@@ -160,19 +160,9 @@ public class BookStorageImpl implements BookStorage {
 
     @Override
     @Transactional
-    public void deleteCommentById(String bookName, String id) {
-        boolean isNotReady = false;
-        Book book = bookService.getByName(bookName);
-
-        if (book == null) {
-            isNotReady = true;
-            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
-        }
-
-        if (!isNotReady) {
-            book.deleteCommentById(id);
-            bookService.update(book);
-        }
+    public void deleteCommentById(String id) {
+            bookService.deleteCommentById(id);
     }
+
 
 }

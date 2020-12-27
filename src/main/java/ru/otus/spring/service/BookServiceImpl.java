@@ -3,6 +3,7 @@ package ru.otus.spring.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.spring.dao.BookCustomDao;
 import ru.otus.spring.dao.BookDao;
 import ru.otus.spring.domain.Book;
 
@@ -11,10 +12,12 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
     private final BookDao bookRepository;
+    private final BookCustomDao bookCustomRepository;
 
     @Autowired
-    public BookServiceImpl(BookDao BookDao) {
-        this.bookRepository = BookDao;
+    public BookServiceImpl(BookDao bookDao, BookCustomDao bookCustomDao) {
+        this.bookRepository = bookDao;
+        this.bookCustomRepository = bookCustomDao;
     }
 
     @Override
@@ -50,5 +53,9 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-
+    @Override
+    @Transactional
+    public void deleteCommentById(String id) {
+        bookCustomRepository.deleteCommentById(id);
+    }
 }

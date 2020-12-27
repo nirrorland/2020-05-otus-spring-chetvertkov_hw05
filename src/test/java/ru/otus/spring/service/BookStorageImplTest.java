@@ -172,7 +172,7 @@ class BookStorageImplTest {
         assertEquals(comments.size(), 2);
         String id = comments.get(0).getId();
 
-        bookStorageService.deleteCommentById("Martian", id);
+        bookStorageService.deleteCommentById(id);
 
         comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 1);
