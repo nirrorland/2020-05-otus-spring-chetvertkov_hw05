@@ -122,13 +122,13 @@ public class ConsoleCmd {
         }
     }
 
-    @ShellMethod(value = "Delete comment by Id {(String ID)}", key = {"dc", "delete-comment"})
-    public void deleteCommentById(@ShellOption String id) {
-        if (id != null) {
-            bookStorage.deleteCommentById(id);
-
+    @ShellMethod(value = "Delete comment for book by Id {(String bookName, String Id)}", key = {"dc", "delete-comment"})
+    public void deleteCommentById(@ShellOption(defaultValue = NOVALUE) String bookName,
+                                  @ShellOption(defaultValue = NOVALUE) String id) {
+        if (!bookName.equals(NOVALUE) && !id.equals(NOVALUE)) {
+            bookStorage.deleteCommentById(bookName, id);
         } else {
-            consoleIOService.out("No comments for this book");
+            consoleIOService.out("Cannot delete comment.");
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.otus.spring.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -7,9 +8,13 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection = "books")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
     @Id
@@ -24,6 +29,8 @@ public class Book {
     @DBRef
     @Field(name = "genre")
     private Genre genre;
+
+    private List<Comment> comments = new ArrayList<>();
 
     public Book(String name, Author author, Genre genre) {
         this.name = name;
@@ -72,6 +79,18 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public List<Comment> getComments() {
+        return this.comments;
+    }
+
+    public void deleteCommentById(String id){
+        this.getComments().removeIf(comm -> id.equals(comm.getId()));
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     @Override

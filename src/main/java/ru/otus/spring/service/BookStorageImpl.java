@@ -17,15 +17,13 @@ public class BookStorageImpl implements BookStorage {
     private final AuthorService authorService;
     private final GenreService genreService;
     private final BookService bookService;
-    private final CommentService commentService;
     private final ConsoleIOService consoleIOService;
     private final EventPublisher eventsPublisher;
 
-    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, CommentService commentService, ConsoleIOService consoleIOService, EventPublisher eventsPublisher) {
+    public BookStorageImpl(AuthorService authorService, GenreService genreService, BookService bookService, ConsoleIOService consoleIOService, EventPublisher eventsPublisher) {
         this.authorService = authorService;
         this.genreService = genreService;
         this.bookService = bookService;
-        this.commentService = commentService;
         this.consoleIOService = consoleIOService;
         this.eventsPublisher = eventsPublisher;
     }
@@ -135,8 +133,9 @@ public class BookStorageImpl implements BookStorage {
         }
 
         if (!isNotReadyForCommentInsertion) {
-            Comment comment = new Comment(book, text);
-            commentService.addComment(comment);
+            Comment comment = new Comment(text);
+            book.addComment(comment);
+            bookService.update(book);
         }
     }
 
@@ -153,7 +152,7 @@ public class BookStorageImpl implements BookStorage {
 
         if (!isNotReady) {
 
-            return commentService.findCommentsByBookId(book.getId());
+            return book.getComments();
         } else {
             return null;
         }
@@ -161,12 +160,18 @@ public class BookStorageImpl implements BookStorage {
 
     @Override
     @Transactional
-    public void deleteCommentById(String id) {
-        Comment comment = commentService.findCommentByID(id);
+    public void deleteCommentById(String bookName, String id) {
+        boolean isNotReady = false;
+        Book book = bookService.getByName(bookName);
 
-        if (comment != null) {
-            commentService.deleteById(comment.getId());
+        if (book == null) {
+            isNotReady = true;
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
+        }
 
+        if (!isNotReady) {
+            book.deleteCommentById(id);
+            bookService.update(book);
         }
     }
 

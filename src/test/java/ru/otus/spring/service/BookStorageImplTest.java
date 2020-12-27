@@ -32,9 +32,6 @@ class BookStorageImplTest {
     @Autowired
     BookService bookService;
 
-    @Autowired
-    CommentService commentService;
-
     @MockBean
     EventListner eventListner;
 
@@ -173,8 +170,9 @@ class BookStorageImplTest {
     void deleteCommentByIdTest() {
         List<Comment> comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 2);
+        String id = comments.get(0).getId();
 
-        bookStorageService.deleteCommentById(comments.get(0).getId());
+        bookStorageService.deleteCommentById("Martian", id);
 
         comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 1);

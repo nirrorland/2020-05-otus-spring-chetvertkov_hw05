@@ -42,12 +42,9 @@ public class DatabaseChangelog {
     public void insertBooks(MongockTemplate mt) {
         books.add(mt.save(new Book("Lord of the Rings", authors.get(0), genres.get(0))));
         books.add(mt.save(new Book("Istorie Florentine", authors.get(1), genres.get(2))));
-        books.add(mt.save(new Book("Martian", authors.get(2), genres.get(1))));
-    }
-
-    @ChangeSet(order = "005", id = "insertComments", author = "kir")
-    public void insertComments(MongockTemplate mt) {
-        comments.add(mt.save(new Comment(books.get(2),"Martian Comment 1")));
-        comments.add(mt.save(new Comment(books.get(2),"Martian Comment 2")));
+        Book book = new Book("Martian", authors.get(2), genres.get(1));
+        book.addComment(new Comment("Martian Comment 1"));
+        book.addComment(new Comment("Martian Comment 2"));
+        books.add(mt.save(book));
     }
 }
