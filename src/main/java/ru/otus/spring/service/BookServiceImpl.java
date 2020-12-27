@@ -2,23 +2,26 @@ package ru.otus.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.spring.dao.BookCustomDao;
 import ru.otus.spring.dao.BookDao;
 import ru.otus.spring.domain.Book;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
     private final BookDao bookRepository;
+    private final BookCustomDao bookCustomRepository;
 
     @Autowired
-    public BookServiceImpl(BookDao BookDao) {
-        this.bookRepository = BookDao;
+    public BookServiceImpl(BookDao bookDao, BookCustomDao bookCustomDao) {
+        this.bookRepository = bookDao;
+        this.bookCustomRepository = bookCustomDao;
     }
 
     @Override
-    public Book getById(long id) {
+    public Book getById(String id) {
         return bookRepository.findById(id).orElse(null);
     }
 
@@ -35,21 +38,24 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void insert(Book book) {
-        bookRepository.saveAndFlush(book);
+        bookRepository.save(book);
     }
 
     @Override
     @Transactional
     public void update(Book book) {
-        bookRepository.saveAndFlush(book);
+        bookRepository.save(book);
     }
 
     @Override
     @Transactional
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
-        bookRepository.flush();
     }
 
-
+    @Override
+    @Transactional
+    public void deleteCommentById(String id) {
+        bookCustomRepository.deleteCommentById(id);
+    }
 }

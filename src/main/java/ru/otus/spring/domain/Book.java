@@ -3,35 +3,34 @@ package ru.otus.spring.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "books")
+@Document(collection = "books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="book_id", unique = true, nullable = false)
-    private long id;
+    private String id;
 
-    @Column(name ="book_name")
     private String name;
 
-    @OneToOne(targetEntity = Author.class)
-    @JoinColumn(name = "author_id", referencedColumnName = "author_id")
+    @DBRef
+    @Field(name = "author")
     private Author author;
 
-    @OneToOne(targetEntity = Genre.class)
-    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
+    @DBRef
+    @Field(name = "genre")
     private Genre genre;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public Book(String name, Author author, Genre genre) {
         this.name = name;
@@ -43,18 +42,18 @@ public class Book {
         this.name = name;
     }
 
-    public Book(long id, String name, Author author, Genre genre) {
+    public Book(String id, String name, Author author, Genre genre) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.genre = genre;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -83,7 +82,11 @@ public class Book {
     }
 
     public List<Comment> getComments() {
-        return comments;
+        return this.comments;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     @Override
