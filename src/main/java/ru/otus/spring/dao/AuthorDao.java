@@ -1,12 +1,10 @@
 package ru.otus.spring.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.spring.domain.Author;
 import java.util.Optional;
 
-public interface AuthorDao  extends JpaRepository<Author, Long> {
-
-    Optional<Author> findById(long id);
+public interface AuthorDao  extends MongoRepository<Author, String> {
 
     Optional<Author> findByNameIgnoreCase(String name);
 

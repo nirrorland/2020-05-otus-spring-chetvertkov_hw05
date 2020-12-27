@@ -25,5 +25,5 @@ public interface BookStorage {
 
     List<Comment> getCommentsForBook(String bookName);
 
-    void deleteCommentById(long id);
+    void deleteCommentById(String bookName, String Id);
 }

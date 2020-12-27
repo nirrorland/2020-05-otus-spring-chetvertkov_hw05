@@ -1,10 +1,10 @@
 package ru.otus.spring.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.spring.domain.Genre;
 import java.util.Optional;
 
-public interface GenreDao extends JpaRepository<Genre, Long> {
+public interface GenreDao extends MongoRepository<Genre, String> {
 
     Optional<Genre> findById(long id);
 

@@ -1,6 +1,5 @@
 package ru.otus.spring.shell;
 
-import org.h2.tools.Console;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -11,9 +10,6 @@ import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.service.BookStorage;
 import ru.otus.spring.service.ConsoleIOService;
-
-import javax.transaction.Transactional;
-import java.sql.SQLException;
 import java.util.List;
 
 @ShellComponent
@@ -126,19 +122,14 @@ public class ConsoleCmd {
         }
     }
 
-    @ShellMethod(value = "Delete comment by Id {(Integer ID)}", key = {"dc", "delete-comment"})
-    public void deleteCommentById(@ShellOption Integer id) {
-        if (id != null) {
-            bookStorage.deleteCommentById(id);
-
+    @ShellMethod(value = "Delete comment for book by Id {(String bookName, String Id)}", key = {"dc", "delete-comment"})
+    public void deleteCommentById(@ShellOption(defaultValue = NOVALUE) String bookName,
+                                  @ShellOption(defaultValue = NOVALUE) String id) {
+        if (!bookName.equals(NOVALUE) && !id.equals(NOVALUE)) {
+            bookStorage.deleteCommentById(bookName, id);
         } else {
-            consoleIOService.out("No comments for this book");
+            consoleIOService.out("Cannot delete comment.");
         }
-    }
-
-    @ShellMethod(value = "Open H2 console", key = {"h2c", "h2-console"})
-    public void h2CpnsoleOpen() throws SQLException {
-        Console.main();
     }
 
 }
