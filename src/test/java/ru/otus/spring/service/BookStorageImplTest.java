@@ -2,8 +2,11 @@ package ru.otus.spring.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
@@ -12,7 +15,6 @@ import ru.otus.spring.event.ErrorEvent;
 import ru.otus.spring.event.EventListner;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
+@Transactional
 class BookStorageImplTest {
 
     @Autowired
@@ -69,7 +72,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void insertBookTest() {
         bookStorageService.insertBook("123", "Tolstoy", "Drama");
 
@@ -77,7 +79,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void insertBookTestWhenNoAuthor() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             bookStorageService.insertBook("123", "Tolstoy22", "Drama");
@@ -88,7 +89,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void insertBookTestWhenNoGenre() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             bookStorageService.insertBook("123", "Tolstoy", "Drama22");
@@ -99,7 +99,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void insertBookTestWhenNoGenreAndNoAuthor() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
                     bookStorageService.insertBook("123", "Tolstoy22", "Drama22");
@@ -110,7 +109,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void updateBookTest() {
         bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy", "Drama");
 
@@ -119,7 +117,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void updateBookTestNoAuthor() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy22", "Drama");
@@ -130,7 +127,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void updateBookTestNoGenre() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy", "Drama22");
@@ -141,7 +137,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void updateBookTestNoAuthorAndNoGenre() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy22", "Drama22");
@@ -152,7 +147,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void deleteBookTest() {
         Book book = bookService.getByName("Lord of the Rings");
         assertNotNull(book);
@@ -164,7 +158,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void addCommentTest() {
         List<Comment> comments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(comments.size(), 0);
@@ -178,7 +171,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void getCommentsForBookTest() {
         List<Comment> comments = bookStorageService.getCommentsForBook("Lord of the Rings");
         assertEquals(comments.size(), 0);
@@ -191,7 +183,6 @@ class BookStorageImplTest {
     }
 
     @Test
-    @Transactional
     void deleteCommentByIdTest() {
         List<Comment> comments = bookStorageService.getCommentsForBook("Martian");
         assertEquals(comments.size(), 2);

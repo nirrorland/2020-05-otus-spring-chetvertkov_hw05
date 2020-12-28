@@ -81,7 +81,7 @@ public class BookController {
     }
 
 
-    @GetMapping("/book/{id}/comments/")
+    @GetMapping("/book/{id}/comments")
     public ResponseEntity<List<CommentDto>> getBookCommentsForBook(@PathVariable("id") Long id) {
         Book book = bookService.getById(id);
         List<Comment> comments = bookStorage.getCommentsForBook(book.getName());

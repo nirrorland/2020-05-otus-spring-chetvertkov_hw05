@@ -105,6 +105,7 @@ public class BookStorageImpl implements BookStorage {
         if (!isNotReadyForUpdate) {
             Book book = new Book(newBookName, author, genre);
             book.setId(oldBook.getId());
+            //book.setComments(oldBook.getComments());
             bookService.update(book);
         } else {
             throw new IllegalArgumentException("Some data not found");
