@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.shell.jline.InteractiveShellApplicationRunner;
-import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
@@ -22,10 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest(properties = {
-        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT + ".enabled=false"
-})
+@SpringBootTest
 class BookStorageImplTest {
 
     @Autowired
@@ -84,7 +79,9 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void insertBookTestWhenNoAuthor() {
-        bookStorageService.insertBook("123", "Tolstoy22", "Drama");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bookStorageService.insertBook("123", "Tolstoy22", "Drama");
+        });
 
         assertNull(bookService.getByName("123"));
         verify(eventListner).handleErrorListener(any(ErrorEvent.class));
@@ -93,7 +90,9 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void insertBookTestWhenNoGenre() {
-        bookStorageService.insertBook("123", "Tolstoy", "Drama22");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bookStorageService.insertBook("123", "Tolstoy", "Drama22");
+        });
 
         assertNull(bookService.getByName("123"));
         verify(eventListner).handleErrorListener(any(ErrorEvent.class));
@@ -102,7 +101,9 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void insertBookTestWhenNoGenreAndNoAuthor() {
-        bookStorageService.insertBook("123", "Tolstoy22", "Drama22");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                    bookStorageService.insertBook("123", "Tolstoy22", "Drama22");
+        });
 
         assertNull(bookService.getByName("123"));
         verify(eventListner, times(2)).handleErrorListener(any(ErrorEvent.class));
@@ -120,7 +121,9 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void updateBookTestNoAuthor() {
-        bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy22", "Drama");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy22", "Drama");
+        });
 
         assertNull(bookService.getByName("NewMartian"));
         verify(eventListner).handleErrorListener(any(ErrorEvent.class));
@@ -129,7 +132,9 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void updateBookTestNoGenre() {
-        bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy", "Drama22");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy", "Drama22");
+        });
 
         assertNull(bookService.getByName("NewMartian"));
         verify(eventListner).handleErrorListener(any(ErrorEvent.class));
@@ -138,7 +143,9 @@ class BookStorageImplTest {
     @Test
     @Transactional
     void updateBookTestNoAuthorAndNoGenre() {
-        bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy22", "Drama22");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bookStorageService.updateBook("Martian", "NewMartian", "Tolstoy22", "Drama22");
+        });
 
         assertNull(bookService.getByName("NewMartian"));
         verify(eventListner, times(2)).handleErrorListener(any(ErrorEvent.class));

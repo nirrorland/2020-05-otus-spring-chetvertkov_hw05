@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @DataJpaTest
-//@Import(AuthorDao.class)
 @Transactional
 public class AuthorDaoJpaTest {
 

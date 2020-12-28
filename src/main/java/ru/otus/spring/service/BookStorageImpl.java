@@ -46,6 +46,7 @@ public class BookStorageImpl implements BookStorage {
     }
 
     @Override
+    @Transactional
     public void insertBook(String bookName, String authorName, String genreName) {
         Author author = authorService.getByName(authorName);
         Genre genre = genreService.getByName(genreName);
@@ -72,6 +73,8 @@ public class BookStorageImpl implements BookStorage {
         if (!isNotReadyForInsertion) {
             Book book = new Book(bookName, author, genre);
             bookService.insert(book);
+        } else {
+            throw new IllegalArgumentException("Some data not found");
         }
     }
 
@@ -103,6 +106,8 @@ public class BookStorageImpl implements BookStorage {
             Book book = new Book(newBookName, author, genre);
             book.setId(oldBook.getId());
             bookService.update(book);
+        } else {
+            throw new IllegalArgumentException("Some data not found");
         }
     }
 
@@ -168,6 +173,20 @@ public class BookStorageImpl implements BookStorage {
             commentService.deleteById(comment.getId());
 
         }
+    }
+
+    @Override
+    public Book getBookByName(String bookName) {
+        boolean isNotReadyForCommentInsertion = false;
+        Book book = bookService.getByName(bookName);
+
+        if (book == null) {
+            isNotReadyForCommentInsertion = true;
+            eventsPublisher.publishErrorEvent(EventMessage.EM_BOOK_NOT_FOUND);
+            return null;
+        }
+
+        return book;
     }
 
 }

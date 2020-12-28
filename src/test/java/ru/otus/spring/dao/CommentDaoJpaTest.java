@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @DataJpaTest
-//@Import({CommentDao.class, BookDao.class})
 @Transactional
 public class CommentDaoJpaTest {
     @Autowired
