@@ -15,7 +15,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @Configuration
 public class Router {
     @Bean
-    RouterFunction<ServerResponse> endpointRoutes (AuthorHandler authorHandler, GenreHandler genreHandler, BookHandler bookHandler) {
+    RouterFunction<ServerResponse> routes (AuthorHandler authorHandler, GenreHandler genreHandler, BookHandler bookHandler) {
         return RouterFunctions
                 .route(GET("/api/genre").and(accept(MediaType.APPLICATION_JSON)), genreHandler::getAllGenres)
                 .andRoute(GET("/api/author").and(accept(MediaType.APPLICATION_JSON)), authorHandler::getAllAuthors)
@@ -24,7 +24,6 @@ public class Router {
                 .andRoute(GET("/api/book/{id}").and(accept(MediaType.APPLICATION_JSON)), bookHandler::getBookById)
                 .andRoute(PUT("/api/book").and(accept(MediaType.APPLICATION_JSON)), bookHandler::updateBook)
                 .andRoute(DELETE("/api/book/{id}").and(accept(MediaType.APPLICATION_JSON)), bookHandler::deleteBook)
-                .andRoute(GET("/api/book/{id}/comments").and(accept(MediaType.APPLICATION_JSON)), bookHandler::getCommentsForBook)
-                ;
+                .andRoute(GET("/api/book/{id}/comments").and(accept(MediaType.APPLICATION_JSON)), bookHandler::getCommentsForBook);
     }
 }

@@ -66,11 +66,11 @@ public class BookHandlerImpl implements BookHandler {
     @Override
     public Mono<ServerResponse> getCommentsForBook(ServerRequest request) {
         return ok().body(
-                 bookRepository.findById(request.pathVariable("id"))
-                .flatMap(book -> Mono.just(book.getComments()))
-                .flatMapMany(Flux::fromIterable)
-                .map(CommentDto::toDto), CommentDto.class
+                bookRepository.findById(request.pathVariable("id"))
+                        .flatMap(book -> Mono.just(book.getComments()))
+                        .flatMapMany(Flux::fromIterable)
+                        .map(CommentDto::toDto), CommentDto.class
         )
-;
+                ;
     }
 }

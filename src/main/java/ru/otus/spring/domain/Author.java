@@ -15,7 +15,7 @@ public class Author {
     @Id
     private String id;
 
-    @Field(name ="name")
+    @Field(name = "name")
     private String name;
 
     public String getName() {

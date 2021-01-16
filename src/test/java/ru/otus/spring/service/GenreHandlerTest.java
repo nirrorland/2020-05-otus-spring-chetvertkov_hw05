@@ -16,7 +16,7 @@ class GenreHandlerTest {
     private WebTestClient client;
 
     @Test
-    void getAllBooksTest() {
+    void getAllGenresTest() {
 
         client.get().uri("/api/genre")
                 .exchange()

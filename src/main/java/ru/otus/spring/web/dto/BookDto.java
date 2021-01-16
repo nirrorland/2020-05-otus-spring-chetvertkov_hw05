@@ -43,7 +43,6 @@ public class BookDto {
     }
 
 
-
     public BookDto(String id, String name, String author, String genre) {
         this.id = id;
         this.name = name;
@@ -58,8 +57,6 @@ public class BookDto {
     public static BookDto toDto(Book book) {
         return new BookDto(book.getId(), book.getName(), book.getAuthor().getName(), book.getGenre().getName());
     }
-
-
 
 
 }

@@ -10,7 +10,7 @@ import ru.otus.spring.web.dto.AuthorDto;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
-public class AuthorHandlerImpl implements AuthorHandler{
+public class AuthorHandlerImpl implements AuthorHandler {
 
     private final AuthorDao authorRepository;
 

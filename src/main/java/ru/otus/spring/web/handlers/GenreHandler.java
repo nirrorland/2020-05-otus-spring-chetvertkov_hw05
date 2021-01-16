@@ -6,6 +6,4 @@ import reactor.core.publisher.Mono;
 
 public interface GenreHandler {
     Mono<ServerResponse> getAllGenres(ServerRequest request);
-
-
 }

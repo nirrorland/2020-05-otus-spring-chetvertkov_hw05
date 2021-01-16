@@ -73,10 +73,6 @@ public class Book {
         this.author = author;
     }
 
-    public void setAuthorAsList(Author author) {
-        this.author = author;
-    }
-
     public Genre getGenre() {
         return genre;
     }
@@ -89,7 +85,7 @@ public class Book {
         return this.comments;
     }
 
-    public void deleteCommentById(String id){
+    public void deleteCommentById(String id) {
         this.getComments().removeIf(comm -> id.equals(comm.getId()));
     }
 
