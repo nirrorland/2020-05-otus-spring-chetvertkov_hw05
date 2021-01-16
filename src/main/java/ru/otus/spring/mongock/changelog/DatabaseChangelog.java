@@ -17,7 +17,6 @@ public class DatabaseChangelog {
     private List<Author> authors = new ArrayList<>();
     private List<Genre> genres = new ArrayList<>();
     private List<Book> books = new ArrayList<>();
-    private List<Comment> comments = new ArrayList<>();
 
     @ChangeSet(order = "001", id = "dropDb", author = "kir", runAlways = true)
     public void dropDb(MongoDatabase db) {

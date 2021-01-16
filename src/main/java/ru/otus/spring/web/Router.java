@@ -1,61 +1,30 @@
 package ru.otus.spring.web;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import ru.otus.spring.dao.AuthorDao;
-import ru.otus.spring.dao.BookDao;
-import ru.otus.spring.dao.GenreDao;
-import ru.otus.spring.domain.Author;
-import ru.otus.spring.domain.Book;
-import ru.otus.spring.domain.Genre;
-import ru.otus.spring.web.dto.AuthorDto;
-import ru.otus.spring.web.dto.BookDto;
-import ru.otus.spring.web.dto.GenreDto;
+import ru.otus.spring.web.handlers.AuthorHandler;
+import ru.otus.spring.web.handlers.BookHandler;
+import ru.otus.spring.web.handlers.GenreHandler;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.web.reactive.function.BodyExtractors.toMono;
-import static org.springframework.web.reactive.function.BodyInserters.fromValue;
-import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
-import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.created;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 
 @Configuration
 public class Router {
     @Bean
-    public RouterFunction<ServerResponse> composedRoutes(AuthorDao authorRepository, GenreDao genreRepository, BookDao bookRepository) {
-        return route()
-//                .GET("/func/person", queryParam("name", StringUtils::isNotEmpty),
-//                        request -> request.queryParam("name")
-//                                .map(authorRepository::findAll)
-//                                .map(persons -> ok().body(persons, Author.class))
-//                                .orElse(notFound().build())
-//                )
-
-
-                .GET("/api/author", accept(APPLICATION_JSON),
-                        request -> ok().contentType(APPLICATION_JSON).body(authorRepository.findAll().map(AuthorDto::toDto), Author.class))
-
-                .GET("/api/genre", accept(APPLICATION_JSON),
-                        request -> ok().contentType(APPLICATION_JSON).body(genreRepository.findAll().map(GenreDto::toDto), Genre.class))
-
-                .GET("/api/book", accept(APPLICATION_JSON),
-                        request -> ok().contentType(APPLICATION_JSON).body(bookRepository.findAll().map(BookDto::toDto), Book.class))
-
-                .POST("/api/book", accept(APPLICATION_JSON),
-                        request -> request.bodyToMono(BookDto.class)
-                                .flatMap(bookDto -> bookRepository.save(BookDto.toDomain(bookDto)))
-                                .flatMap(book -> ok().contentType(APPLICATION_JSON).build());
-
-
-
-//                .GET("/func/person/{id}", accept(APPLICATION_JSON),
-//                        request -> repository.findById(request.pathVariable("id"))
-//                                .flatMap(person -> ok().contentType(APPLICATION_JSON).body(fromObject(person)))
-//                )
-
+    RouterFunction<ServerResponse> endpointRoutes (AuthorHandler authorHandler, GenreHandler genreHandler, BookHandler bookHandler) {
+        return RouterFunctions
+                .route(GET("/api/genre").and(accept(MediaType.APPLICATION_JSON)), genreHandler::getAllGenres)
+                .andRoute(GET("/api/author").and(accept(MediaType.APPLICATION_JSON)), authorHandler::getAllAuthors)
+                .andRoute(GET("/api/book").and(accept(MediaType.APPLICATION_JSON)), bookHandler::getAllBooks)
+                .andRoute(POST("/api/book").and(accept(MediaType.APPLICATION_JSON)), bookHandler::addBook)
+                .andRoute(GET("/api/book/{id}").and(accept(MediaType.APPLICATION_JSON)), bookHandler::getBookById)
+                .andRoute(PUT("/api/book").and(accept(MediaType.APPLICATION_JSON)), bookHandler::updateBook)
+                .andRoute(DELETE("/api/book/{id}").and(accept(MediaType.APPLICATION_JSON)), bookHandler::deleteBook)
+                .andRoute(GET("/api/book/{id}/comments").and(accept(MediaType.APPLICATION_JSON)), bookHandler::getCommentsForBook)
+                ;
     }
 }

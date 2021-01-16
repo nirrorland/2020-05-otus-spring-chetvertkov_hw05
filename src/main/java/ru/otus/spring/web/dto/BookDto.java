@@ -4,8 +4,6 @@ import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
 
-import java.util.Collections;
-
 public class BookDto {
     private String id;
     private String name;
@@ -54,11 +52,7 @@ public class BookDto {
     }
 
     public static Book toDomain(BookDto bookDto) {
-
-        return new Book(bookDto.getName(),
-                new Author(bookDto.getAuthor()),
-                new Genre(bookDto.getGenre())
-                );
+        return new Book(bookDto.getId(), bookDto.getName(), new Author(bookDto.getAuthor()), new Genre(bookDto.getGenre()));
     }
 
     public static BookDto toDto(Book book) {

@@ -73,6 +73,10 @@ public class Book {
         this.author = author;
     }
 
+    public void setAuthorAsList(Author author) {
+        this.author = author;
+    }
+
     public Genre getGenre() {
         return genre;
     }
