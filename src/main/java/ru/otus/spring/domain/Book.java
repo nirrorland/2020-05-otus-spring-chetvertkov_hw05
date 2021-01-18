@@ -85,7 +85,7 @@ public class Book {
         return this.comments;
     }
 
-    public void deleteCommentById(String id){
+    public void deleteCommentById(String id) {
         this.getComments().removeIf(comm -> id.equals(comm.getId()));
     }
 

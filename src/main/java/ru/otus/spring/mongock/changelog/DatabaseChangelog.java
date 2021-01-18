@@ -8,6 +8,7 @@ import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,6 @@ public class DatabaseChangelog {
     private List<Author> authors = new ArrayList<>();
     private List<Genre> genres = new ArrayList<>();
     private List<Book> books = new ArrayList<>();
-    private List<Comment> comments = new ArrayList<>();
 
     @ChangeSet(order = "001", id = "dropDb", author = "kir", runAlways = true)
     public void dropDb(MongoDatabase db) {
