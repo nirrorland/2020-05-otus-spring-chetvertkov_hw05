@@ -1,6 +1,5 @@
-package ru.otus.spring.web;
+package ru.otus.spring.web.security;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.spring.Main;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -18,22 +16,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GenreControllerTest {
+public class AuthorControllerSecurityTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    void whenGetAllAuthorsAndNoAuthThen401() throws Exception {
+        mockMvc.perform(get("/api/author")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+
+    }
+
+    @WithMockUser(
+            username = "user",
+            authorities = {"USER"}
+    )
+    @Test
+    void whenGetAllAuthorsAndAndWrongPermitionsThen403() throws Exception {
+        mockMvc.perform(get("/api/author")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+    }
 
     @WithMockUser(
             username = "admin",
             authorities = {"ADMIN"}
     )
     @Test
-    void getAllGenres_RestGet() throws Exception {
-        mockMvc.perform(get("/api/genre")
+    void whenGetAllAuthorsAndAndEnoughPermitionsThenOk() throws Exception {
+        mockMvc.perform(get("/api/author")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].genreName", is("Drama")))
-                .andExpect(jsonPath("$[2].genreName", is("History")));
+                .andExpect(status().isOk());
+
     }
 }

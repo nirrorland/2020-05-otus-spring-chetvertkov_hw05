@@ -13,3 +13,7 @@ insert into books (book_id, `book_name`, author_id, genre_id) values (3, 'Martia
 insert into comments (comment_id, book_id, `text`) values (1, 3, 'MartianComment');
 insert into comments (comment_id, book_id, `text`) values (2, 3, 'Martian Comment 2');
 
+insert into users (user_id, username, password, role) values (1, 'admin', 'password', 'ADMIN');
+insert into users (user_id, username, password, role) values (2, 'user', 'password', 'USER');
+
+

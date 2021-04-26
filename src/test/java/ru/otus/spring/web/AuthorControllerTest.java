@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.Main;
 
@@ -22,6 +23,10 @@ public class AuthorControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @WithMockUser(
+            username = "admin",
+            authorities = {"ADMIN"}
+    )
     @Test
     void getAllAuthors_RestGet() throws Exception {
         mockMvc.perform(get("/api/author")
