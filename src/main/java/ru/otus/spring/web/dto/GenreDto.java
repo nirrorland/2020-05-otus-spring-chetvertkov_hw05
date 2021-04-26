@@ -1,6 +1,5 @@
 package ru.otus.spring.web.dto;
 
-import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Genre;
 
 public class GenreDto {
