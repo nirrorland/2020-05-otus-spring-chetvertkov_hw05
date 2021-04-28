@@ -8,10 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -30,8 +27,8 @@ public class AuthorControllerSecurityTest {
     }
 
     @WithMockUser(
-            username = "user",
-            authorities = {"USER"}
+            username = "notuser",
+            authorities = {"NOTUSER"}
     )
     @Test
     void whenGetAllAuthorsAndAndWrongPermitionsThen403() throws Exception {

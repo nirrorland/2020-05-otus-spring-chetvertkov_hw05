@@ -30,8 +30,8 @@ public class GenreControllerSecurityTest {
     }
 
     @WithMockUser(
-            username = "user",
-            authorities = {"USER"}
+            username = "notuser",
+            authorities = {"NOTUSER"}
     )
     @Test
     void whenGetAllGenresAndWrongPermitionsThen403() throws Exception {

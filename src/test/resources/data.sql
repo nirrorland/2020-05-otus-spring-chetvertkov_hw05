@@ -15,4 +15,4 @@ insert into comments (comment_id, book_id, `text`) values (2, 3, 'Martian Commen
 
 insert into users (user_id, username, password, role) values (1, 'admin', 'password', 'ADMIN');
 insert into users (user_id, username, password, role) values (2, 'user', 'password', 'USER');
-
+insert into users (user_id, username, password, role) values (3, 'notuser', 'password', 'NOTUSER');

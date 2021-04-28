@@ -2,6 +2,7 @@ package ru.otus.spring.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("/author")
     public ResponseEntity<List<AuthorDto>> getAllAuthors() {
         return ResponseEntity.ok(authorService.getAll().stream().map(AuthorDto::toDto)
