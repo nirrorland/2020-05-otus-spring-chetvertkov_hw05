@@ -3,6 +3,7 @@ package ru.otus.spring.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.otus.spring.domain.Book;
@@ -31,13 +32,14 @@ public class BookController {
         this.bookStorage = bookStorage;
     }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("/book")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         return ResponseEntity.ok(bookStorage.getAllBooks().stream().map(BookDto::toDto)
                 .collect(Collectors.toList()));
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/book")
     public ResponseEntity<Book> addBook(@RequestBody BookDto bookDto) {
         try {
@@ -51,14 +53,14 @@ public class BookController {
 
     }
 
-
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") Long id) {
         Book book = bookService.getById(id);
         return ResponseEntity.ok(BookDto.toDto(book));
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/book")
     public ResponseEntity<Book> updateBook(@RequestBody BookDto bookDto) {
         try {
@@ -73,14 +75,14 @@ public class BookController {
 
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/book/{id}")
     public ResponseEntity deleteBook(@PathVariable("id") Long id) {
         bookService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("/book/{id}/comments")
     public ResponseEntity<List<CommentDto>> getBookCommentsForBook(@PathVariable("id") Long id) {
         Book book = bookService.getById(id);

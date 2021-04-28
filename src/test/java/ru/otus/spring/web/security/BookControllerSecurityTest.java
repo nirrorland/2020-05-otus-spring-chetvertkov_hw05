@@ -29,8 +29,8 @@ public class BookControllerSecurityTest {
     }
 
     @WithMockUser(
-            username = "user",
-            authorities = {"USER"}
+            username = "notuser",
+            authorities = {"NOTUSER"}
     )
     @Test
     void whenGetAllBooksAndWrongPermtionsThen403() throws Exception {
@@ -59,8 +59,8 @@ public class BookControllerSecurityTest {
     }
 
     @WithMockUser(
-            username = "user",
-            authorities = {"USER"}
+            username = "notuser",
+            authorities = {"NOTUSER"}
     )
     @Test
     void whenGetCommentsForBookAndWrongPermitionsThen403() throws Exception {
@@ -82,6 +82,57 @@ public class BookControllerSecurityTest {
 
     }
 
+    @WithMockUser(
+            username = "user",
+            authorities = {"USER"}
+    )
+    @Test
+    @Transactional
+    void whenAddBookWithWrongPermitionsThen403() throws Exception {
+        mockMvc.perform(post("/api/book")
+                .content("{\"name\":\"asdasd\",\"author\":\"Tolstoy\",\"genre\":\"History\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
 
+    }
+
+    @WithMockUser(
+            username = "admin",
+            authorities = {"ADMIN"}
+    )
+    @Test
+    @Transactional
+    void whenAddBookWithEnoughPermitionsThenOk() throws Exception {
+        mockMvc.perform(post("/api/book")
+                .content("{\"name\":\"asdasd\",\"author\":\"Tolstoy\",\"genre\":\"History\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(
+            username = "user",
+            authorities = {"USER"}
+    )
+    @Test
+    @Transactional
+    void whenEditBookWithWrongPermitionsThen403() throws Exception {
+        mockMvc.perform(put("/api/book")
+                .content("{\"id\":\"3\",\"name\":\"Martian\",\"author\":\"Tolstoy\",\"genre\":\"Drama\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @WithMockUser(
+            username = "admin",
+            authorities = {"ADMIN"}
+    )
+    @Test
+    @Transactional
+    void whenEditBookWithEnoughPermitionsThenOk() throws Exception {
+        mockMvc.perform(put("/api/book")
+                .content("{\"id\":\"3\",\"name\":\"Martian\",\"author\":\"Tolstoy\",\"genre\":\"Drama\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
 }
